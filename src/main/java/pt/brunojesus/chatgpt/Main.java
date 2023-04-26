@@ -7,6 +7,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import pt.brunojesus.chatgpt.mapper.OpenAiRequestToJsonString;
 import pt.brunojesus.chatgpt.model.Chat;
 import pt.brunojesus.chatgpt.model.request.*;
 import pt.brunojesus.chatgpt.model.request.factory.OpenAiRequestFactory;
@@ -25,14 +26,8 @@ public class Main {
 		Chat chat = new Chat(greeting);
 		OpenAiRequest req = openAiRequestFactory.createChatOpenAiRequest(chat);
 				
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonPayload = null;
-		try {
-			jsonPayload = mapper.writeValueAsString(req);
-		} catch (JsonProcessingException e) {
-			System.err.println(e.getMessage());
-			return;
-		}
+		OpenAiRequestToJsonString mapper = new OpenAiRequestToJsonString();
+		String jsonPayload = mapper.map(req);
 		
 		System.out.println(jsonPayload);
 	}
