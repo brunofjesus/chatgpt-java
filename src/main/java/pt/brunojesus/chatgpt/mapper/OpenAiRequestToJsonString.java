@@ -13,6 +13,10 @@ public class OpenAiRequestToJsonString {
 		mapper = new ObjectMapper();
 	}
 	
+	public OpenAiRequestToJsonString(ObjectMapper mapper) {
+		this.mapper = mapper;
+	}
+	
 	public String map(OpenAiRequest request) {
 		String jsonPayload = null;
 		try {
