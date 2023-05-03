@@ -3,6 +3,7 @@ package pt.brunojesus.chatgpt;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import pt.brunojesus.chatgpt.model.Chat;
 import pt.brunojesus.chatgpt.model.request.*;
 import pt.brunojesus.chatgpt.model.request.factory.OpenAiRequestFactory;
 import pt.brunojesus.chatgpt.model.response.OpenAiResponse;
+import pt.brunojesus.chatgpt.service.OpenAiChatService;
 import pt.brunojesus.chatgpt.util.ConfigParser;
 import pt.brunojesus.chatgpt.util.FileUtils;
 
@@ -24,21 +26,42 @@ public class Main {
 		String greeting = config.get("greeting");
 		String token = config.get("token");
 
-		System.out.println(greeting);
-
+		Chat chat = new Chat();
 		OpenAiRequestFactory openAiRequestFactory = new OpenAiRequestFactory();
-		Chat chat = new Chat(greeting);
-		OpenAiRequest req = openAiRequestFactory.createChatOpenAiRequest(chat);
+		OpenAiCompletionsClient openAiCompletionsClient = new OpenAiCompletionsClient(
+				token,
+				 new OpenAiRequestToJsonString(), 
+				 new OpenAiResponseHandler(new ObjectMapper())
+		);
 
-		OpenAiRequestToJsonString mapper = new OpenAiRequestToJsonString();
-		OpenAiResponseHandler responseHandler = new OpenAiResponseHandler(new ObjectMapper());
-
-		OpenAiCompletionsClient client = new OpenAiCompletionsClient(token, mapper, responseHandler);
-
-		OpenAiResponse response = client.post(req);
-
-		response.getChoices().stream()
-		.map(c -> c.getText()).forEach(t -> System.out.println(t));
+		
+		final OpenAiChatService service = new OpenAiChatService(
+				openAiRequestFactory,
+				openAiCompletionsClient
+				);
+		
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+			System.out.print("Person: ");
+			service.sendMessage(chat, sc.nextLine()).forEach(message ->
+			System.out.printf("%s: %s\n", message.getSubject(), message.getContent()));
+		}
+		
+//		System.out.println(greeting);
+//
+//		OpenAiRequestFactory openAiRequestFactory = new OpenAiRequestFactory();
+//		Chat chat = new Chat(greeting);
+//		OpenAiRequest req = openAiRequestFactory.createChatOpenAiRequest(chat);
+//
+//		OpenAiRequestToJsonString mapper = new OpenAiRequestToJsonString();
+//		OpenAiResponseHandler responseHandler = new OpenAiResponseHandler(new ObjectMapper());
+//
+//		OpenAiCompletionsClient client = new OpenAiCompletionsClient(token, mapper, responseHandler);
+//
+//		OpenAiResponse response = client.post(req);
+//
+//		response.getChoices().stream()
+//		.map(c -> c.getText()).forEach(t -> System.out.println(t));
 	}
 
 }

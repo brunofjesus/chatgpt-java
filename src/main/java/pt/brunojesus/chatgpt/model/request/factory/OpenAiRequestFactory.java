@@ -21,7 +21,7 @@ public class OpenAiRequestFactory {
 	}
 
 	private String chatPromptToString(Chat chat) {
-		String result = chat.getPrompt();
+		String result = "";
 		
 		// result needs to be Subject:MessageContent\n... 
 		for (int i = 0; i < chat.getMessages().size(); i++) {

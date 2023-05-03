@@ -14,7 +14,7 @@ class OpenAiRequestFactoryTest {
 
 	@Test
 	void testCreateChatOpenAiRequest() {
-		final Chat chat = new Chat("test prompt");
+		final Chat chat = new Chat();
 		chat.addMessage(new Message("AI", "HelloHuman"));
 
 		final OpenAiRequest result = subject.createChatOpenAiRequest(chat);
@@ -30,7 +30,7 @@ class OpenAiRequestFactoryTest {
 		assertEquals(1, result.getStop().length);
 		assertEquals("AI:", result.getStop()[0]);
 
-		assertEquals("test prompt\nAI:HelloHuman\nAI:", result.getPrompt());
+		assertEquals("\nAI:HelloHuman\nAI:", result.getPrompt());
 	}
 
 }
