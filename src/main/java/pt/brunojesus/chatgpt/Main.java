@@ -46,22 +46,6 @@ public class Main {
 			service.sendMessage(chat, sc.nextLine()).forEach(message ->
 			System.out.printf("%s: %s\n", message.getSubject(), message.getContent()));
 		}
-		
-//		System.out.println(greeting);
-//
-//		OpenAiRequestFactory openAiRequestFactory = new OpenAiRequestFactory();
-//		Chat chat = new Chat(greeting);
-//		OpenAiRequest req = openAiRequestFactory.createChatOpenAiRequest(chat);
-//
-//		OpenAiRequestToJsonString mapper = new OpenAiRequestToJsonString();
-//		OpenAiResponseHandler responseHandler = new OpenAiResponseHandler(new ObjectMapper());
-//
-//		OpenAiCompletionsClient client = new OpenAiCompletionsClient(token, mapper, responseHandler);
-//
-//		OpenAiResponse response = client.post(req);
-//
-//		response.getChoices().stream()
-//		.map(c -> c.getText()).forEach(t -> System.out.println(t));
 	}
 
 }
